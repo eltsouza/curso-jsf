@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:head>
+      <title>Olá JSF</title>
+      Olá JSF
+  </h:head>
+  
+  <h:body>
+  
+     <h:form id="formPessoa">
+     
+        <h1>Misturando HTML com JSF</h1>
+        <table></table>
+        
+        <br/>
+        Nome:
+        <h:inputText id="nome" value="#{pessoaBean.nome}"/> 
+        <br/>
+     
+        <br/>
+        Sobrenome:
+        <h:inputText id="sobrenome" value="#{pessoaBean.sobrenome}"/> 
+        <br/>
+     
+        <br/>
+        Nome Completo:
+        <h:outputText id="nomeCompleto" value="#{pessoaBean.nomeCompleto}"/>
+        <br/>
+        
+        <!--<h:outputLabel value="teste jsf"> </h:outputLabel>-->
+        
+        <br/>
+        <h:commandButton value="Mostrar Nome" action="#{pessoaBean.mostrarNome}"/> 
+        <br/>
+     
+     </h:form>
+  
+  </h:body>
+
+</html>
