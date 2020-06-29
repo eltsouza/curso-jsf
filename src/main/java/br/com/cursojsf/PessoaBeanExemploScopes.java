@@ -42,8 +42,9 @@ public class PessoaBeanExemploScopes {
 		
 		if(nomes.size() > 3) {
 		  commandButton.setDisabled(true); // Exemplo Binding componente pagina JSF(xhtml) -- Amarra o componente da pagina para trabalhar do lado do back-end        
+		  return "paginaNavegada?faces-redirect=true";
 		}
-		return "";
+		return ""; //null ou vazio fica na mesma pagina -> outcome
 	}
 	
 	public void setNomes(List<String> nomes) {
