@@ -21,9 +21,29 @@
         <br/>
 
         <br/>
-        <h:commandButton binding="#{pessoaBeanExemploScopes.commandButton}"    value="Adicionar Nome Processo binding" action="#{pessoaBeanExemploScopes.addNome}"/> 
+        Senha:
+        <h:inputSecret id="senha" value="#{pessoaBeanExemploScopes.senha}"/> 
         <br/>
-
+        
+        <br/>
+        Texto:
+        <h:inputTextarea id="texto" value="#{pessoaBeanExemploScopes.texto}"/> 
+        <br/>
+        
+        <br/>
+        <h:commandButton binding="#{pessoaBeanExemploScopes.commandButton}" value="Adicionar Nome Processo binding" action="#{pessoaBeanExemploScopes.addNome}"/> 
+        <br/>
+     
+        <br/>
+        <br/>
+        <br/>
+        <h:outputText  value="#{pessoaBeanExemploScopes.nome}"/> <!-- Usado para mostrar -->
+        <br/>
+        <br/>
+        <br/>
+        <h:outputLabel value="Nome:" for="componente"/>
+        <h:inputText id="componome" value="#{pessoaBeanExemploScopes.nome}"/> <!-- Usado para gravar -->
+        
 
         <h:dataTable value="#{pessoaBeanExemploScopes.nomes}" var="listaNome">        
            <h:column>              

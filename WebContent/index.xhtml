@@ -5,6 +5,12 @@
 
   <h:head>
       <title>Olá JSF - Index.jsf</title>
+      <script>
+         function alterarValorDoCampo() {
+            var campo = document.getElementById('formPessoa:nome');
+            campo.value = 'eu cliquei no campo';
+         }
+      </script>
   </h:head>
   
   <h:body>
@@ -14,6 +20,14 @@
         <h1>Arquivo configuracao WEB.xml</h1>
 
         Navegação Implícita e Explicita em JSF.
+        <br/>
+        <br/>
+        
+        <h:inputText id="nome" onclick="this.value='troquei o valor'" onchange="this.value = this.value.toUpperCase()"/>
+        <h:commandButton value="Clicar" onclick="alterarValorDoCampo()"/>
+        
+        <br/>
+        <br/>
         
         <h:commandButton value="Navegar Implicita" action="ExemploManagedBeansScopes" />
         <h:commandButton value="Navegar Explicita" action="explicita" />

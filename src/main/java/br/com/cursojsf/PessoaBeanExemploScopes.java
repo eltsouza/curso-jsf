@@ -33,6 +33,10 @@ public class PessoaBeanExemploScopes {
 	
 	private String nome;
 	
+	private String senha;
+	
+	private String texto;
+	
 	private HtmlCommandButton commandButton;
 	
 	private List<String> nomes = new ArrayList<String>();
@@ -55,7 +59,6 @@ public class PessoaBeanExemploScopes {
 		return nomes;
 	}
 	
-	
 	public String getNome() {
 		return nome;
 	}
@@ -69,6 +72,22 @@ public class PessoaBeanExemploScopes {
 	
 	public HtmlCommandButton getCommandButton() {
 		return commandButton;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
 	}
 	
 }
