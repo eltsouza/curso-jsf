@@ -1,5 +1,6 @@
 package br.com.cursojsf;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +30,10 @@ import javax.faces.component.html.HtmlCommandButton;
 //@SessionScoped
 @ViewScoped
 @ManagedBean(name ="pessoaBeanExemploScopes")
-public class PessoaBeanExemploScopes {
+public class PessoaBeanExemploScopes implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private String nome;
 	
 	private String senha;

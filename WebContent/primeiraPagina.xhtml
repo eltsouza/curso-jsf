@@ -12,29 +12,22 @@
   
      <h:form id="formPessoa">
      
-        <h1>Misturando HTML com JSF</h1>
-        <table></table>
+        <h1>Primeiro cadastro usando JSF/JPA e Hibernate</h1>
         
+        <h:outputText value="Id:"/>
+        <h:inputText valur="#{pessoaBean.pessoa.id}" readonly="true"/> 
         <br/>
-        Nome:
-        <h:inputText id="nome" value="#{pessoaBean.nome}"/> 
+        <h:outputLabel value="Nome:"/>
+        <h:inputText value="#{pessoaBean.pessoa.nome}"></h:inputText>
         <br/>
-     
+        <h:outputLabel value="Sobrenome:"/>
+        <h:inputText value="#{pessoaBean.pessoa.sobrenome}"></h:inputText>
         <br/>
-        Sobrenome:
-        <h:inputText id="sobrenome" value="#{pessoaBean.sobrenome}"/> 
+        <h:outputLabel value="Idade:"/>
+        <h:inputText value="#{pessoaBean.pessoa.idade}"></h:inputText>
         <br/>
-     
-        <br/>
-        Nome Completo:
-        <h:outputText id="nomeCompleto" value="#{pessoaBean.nomeCompleto}"/>
-        <br/>
-        
-        <!--<h:outputLabel value="teste jsf"> </h:outputLabel>-->
-        
-        <br/>
-        <h:commandButton value="Mostrar Nome" action="#{pessoaBean.mostrarNome}"/> 
-        <br/>
+        <h:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
+        <h:commandButton value="Novo" action="#{pessoaBean.novo}"/>
      
      </h:form>
   
