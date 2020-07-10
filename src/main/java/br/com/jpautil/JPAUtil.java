@@ -18,6 +18,10 @@ public class JPAUtil {
 	public static EntityManager getEntityManager() {
 		return factory.createEntityManager();
 	}
-   	
+	
+	public static Object getPrimayKey(Object entity) {
+		
+		return factory.getPersistenceUnitUtil().getIdentifier(entity);
+	}
 
 }
