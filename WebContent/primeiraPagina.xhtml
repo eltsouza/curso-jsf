@@ -5,7 +5,7 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
   <h:head>
-      <title>Curso JSF</title>
+      <title>Cadastro de Usuários</title>
   </h:head>
   
   <h:body>
@@ -18,7 +18,7 @@
         
         <h:panelGrid columns="2">
            <f:facet name="header">
-              <h:outputText value="Cadastro de Pessoas"/>
+              <h:outputText value="Cadastro de usuários"/>
            </f:facet>
            <h:outputText value="Id:"/>
            <h:inputText value="#{pessoaBean.pessoa.id}" readonly="true"/>
@@ -40,7 +40,7 @@
            </h:selectOneMenu> 
 
            <h:outputLabel value="Frameworks"/>
-           <h:selectManyMenu id="campoframeworks" value="#{pessoaBean.pessoa.frameworks}" style="height:150px">
+           <h:selectManyMenu id="campoframeworks" value="#{pessoaBean.pessoa.frameworks}" style="height:150px;width:164px">
               <f:selectItem itemValue="Hibernate"/>
               <f:selectItem itemValue="Spring MVC"/>
               <f:selectItem itemValue="JPA"/>
@@ -51,7 +51,20 @@
            <h:outputLabel value="Ativo"/>
            <h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
             
+           <h:outputLabel value="Login"/> 
+           <h:inputText value="#{pessoaBean.pessoa.login}"/> 
+           
+           <h:outputLabel value="Senha"/> 
+           <h:inputSecret value="#{pessoaBean.pessoa.senha}"/> 
             
+           <h:outputLabel value="Perfil"/> 
+           <h:selectOneMenu id="perfil" value="#{pessoaBean.pessoa.perfilUser}" style="width:164px;">
+              <f:selectItem itemValue="" itemLabel="[-Selecione-]" noSelectionOption="true"/>
+              <f:selectItem itemValue="Administrador" itemLabel="Administrador"/>
+              <f:selectItem itemValue="Secretario" itemLabel="Secretario"/>
+              <f:selectItem itemValue="Recepcionista" itemLabel="Recepcionista"/>
+           </h:selectOneMenu> 
+                       
            <h:outputLabel/>          
            <h:panelGroup>
               <br/>
@@ -59,7 +72,7 @@
               <h:outputLabel style="width:200px;" value="     "/>    
               <h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="/resources/img/salvar.png" title="Salvar registro"/>
               <h:outputLabel style="width:200px;" value="     "/>    
-              <h:commandButton value="Limpar" type="reset" image="/resources/img/limpar.png" title="Limpar formlário"/>
+              <h:commandButton value="Limpar" type="reset" image="/resources/img/limpar.png" title="Limpar formulário"/>
            </h:panelGroup>
         </h:panelGrid>
         
@@ -67,7 +80,7 @@
         <h:dataTable value="#{pessoaBean.pessoas}" var="pessoa" border="1" cellpadding="6">
            
            <f:facet name="header">
-              Lista de Pessoas cadastradas
+              Lista de usuários cadastradas
            </f:facet>
             
            <h:column>
@@ -87,6 +100,14 @@
               <h:outputText value="#{pessoa.idade}"/>
            </h:column>
            <h:column>
+              <f:facet name="header">Login</f:facet>
+              <h:outputText value="#{pessoa.login}"/>
+           </h:column>           
+           <h:column>
+              <f:facet name="header">Perfil</f:facet>
+              <h:outputText value="#{pessoa.perfilUser}"/>
+           </h:column>           
+           <h:column rendered="#{pessoaBean.permiteAcesso('Administrador')}">
               <f:facet name="header">Ação</f:facet>
            
               <h:commandLink>

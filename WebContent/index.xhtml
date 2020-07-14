@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html">
 
   <h:head>
-      <title>Olá JSF - Index.jsf</title>
+      <title>Acesso ao Sistema</title>
       <script>
          function alterarValorDoCampo() {
             var campo = document.getElementById('formPessoa:nome');
@@ -15,22 +15,20 @@
   
   <h:body>
   
-     <h:form id="formPessoa">
+     <h:form id="formLogin" style="margin-top:22%; margin-left:40%;">
      
-        <h1>Arquivo configuracao WEB.xml</h1>
+        <h1>Sistema de Cadastro</h1>
+        
+        <h:panelGrid columns="2">
+           <h:outputLabel value="Login"/> 
+           <h:inputText value="#{pessoaBean.pessoa.login}"/>
 
-        Navegação Implícita e Explicita em JSF.
-        <br/>
-        <br/>
+           <h:outputLabel value="Senha"/> 
+           <h:inputSecret value="#{pessoaBean.pessoa.senha}"/>
+           
+           <h:commandButton value="Acessar" action="#{pessoaBean.logar}"/>
         
-        <h:inputText id="nome" onclick="this.value='troquei o valor'" onchange="this.value = this.value.toUpperCase()"/>
-        <h:commandButton value="Clicar" onclick="alterarValorDoCampo()"/>
-        
-        <br/>
-        <br/>
-        
-        <h:commandButton value="Navegar Implicita" action="ExemploManagedBeansScopes" />
-        <h:commandButton value="Navegar Explicita" action="explicita" />
+        </h:panelGrid>
      
      </h:form>
   
