@@ -3,6 +3,7 @@
 	<persistence-unit name="curso-jsf">
 	    <provider>org.hibernate.ejb.HibernatePersistence</provider>
 	    <class>br.com.entidades.Pessoa</class>
+	    <class>br.com.entidades.Lancamento</class>	    
 	    
 	   <properties>
 	      <!-- Dados de conexão com o banco -->
