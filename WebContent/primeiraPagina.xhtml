@@ -4,7 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:ai="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
       
   <h:head>
       <title>Cadastro de Usuários</title>
@@ -28,14 +28,16 @@
         <h:outputText value="Id:"/>
         <h:inputText value="#{pessoaBean.pessoa.id}" readonly="true"/>        
         <h:outputLabel value="Nome:"/>
-        <h:inputText value="#{pessoaBean.pessoa.nome}" required="true" requiredMessage="Informe o nome da pessoa" 
+        <h:inputText value="#{pessoaBean.pessoa.nome}" required="true" 
+           requiredMessage="Informe o nome da pessoa" pt:placeholder="Nome da pessoa"
            validatorMessage="O campo nome da pessoa deve ter no minimo 5 ou máximo 50 caracteres">
            <f:validateLength minimum="5" maximum="50"/>     
         </h:inputText>        
         <h:outputLabel value="Sobrenome:"/>
-        <h:inputText value="#{pessoaBean.pessoa.sobrenome}" required="true" requiredMessage="Informe o sobrenome da pessoa"/>        
+        <h:inputText value="#{pessoaBean.pessoa.sobrenome}" required="true" 
+            requiredMessage="Informe o sobrenome da pessoa"  pt:placeholder="Sobrenome da pessoa"/>        
         <h:outputLabel value="Idade:"/>
-        <h:inputText value="#{pessoaBean.pessoa.idade}"/>
+        <h:inputText value="#{pessoaBean.pessoa.idade}"  pt:placeholder="Idade da pessoa"/>
         <h:outputLabel value="Frameworks:"/>
         <h:selectManyMenu id="campoframeworks" value="#{pessoaBean.pessoa.frameworks}" style="height:150px;width:164px">
           <f:selectItem itemValue="Hibernate"/>
@@ -57,7 +59,7 @@
           <f:selectItem itemValue="F" itemLabel="Feminino"/>
         </h:selectOneRadio>   
         <h:outputLabel value="Data Nascimento:"/>
-        <h:inputText value="#{pessoaBean.pessoa.dataNascimento}" converterMessage="Data Inválida">
+        <h:inputText value="#{pessoaBean.pessoa.dataNascimento}" converterMessage="Data Inválida"  pt:placeholder="Data Nascimento da pessoa">
           <f:convertDateTime pattern="dd/MM/YYYY" locale="pt_BR"  timeZone="GMT-03:00"/>
         </h:inputText>
         
@@ -68,7 +70,20 @@
           <f:selectItem itemValue="PL" itemLabel="Pleno"/>
           <f:selectItem itemValue="SR" itemLabel="Sênior"/>
           <f:selectItem itemValue="ES" itemLabel="Especialista"/>
-        </h:selectOneMenu>        
+        </h:selectOneMenu>     
+
+        <h:outputLabel value="Estados:"/> 
+        <h:selectOneMenu value="#{pessoaBean.pessoa.estados}" immediate="true">
+           <f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
+           <f:selectItems value="#{pessoaBean.estados}"/>
+           <f:ajax event="change" execute="@this" render="comboCidade"
+              listener="#{pessoaBean.carregaCidades}"/>
+        </h:selectOneMenu>    
+        <h:outputLabel value="Cidades: "/> 
+        <h:selectOneMenu value="#{pessoaBean.pessoa.cidades}" immediate="true" id="comboCidade">
+           <f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
+          <f:selectItems value="#{pessoaBean.cidades}"/>
+        </h:selectOneMenu>    
         
         <h:outputLabel value="Linguagens:"/>
         <h:selectManyCheckbox value="#{pessoaBean.pessoa.linguagens}">
@@ -80,7 +95,7 @@
         </h:selectManyCheckbox>
         
         <h:outputLabel value="Cep:"/>
-        <h:inputText value="#{pessoaBean.pessoa.cep}">
+        <h:inputText value="#{pessoaBean.pessoa.cep}"  pt:placeholder="Cep da pessoa">
           <f:ajax event="blur" execute="@this" 
                   listener="#{pessoaBean.pesquisaCep}"
                   render="logradouro complemento bairro localidade uf unidade ibge gia"/>          
@@ -95,7 +110,7 @@
         <h:outputLabel value="Bairro:"/>
         <h:inputText value="#{pessoaBean.pessoa.bairro}" id="bairro"/>
 
-        <h:outputLabel value="Localidade:"/>
+        <h:outputLabel value="Cidade"/>
         <h:inputText value="#{pessoaBean.pessoa.localidade}" id="localidade"/>
 
         <h:outputLabel value="Uf:"/>
@@ -111,9 +126,9 @@
         <h:inputText value="#{pessoaBean.pessoa.gia}" id="gia"/>
         
         <h:outputLabel value="Login:"/> 
-        <h:inputText value="#{pessoaBean.pessoa.login}"/>         
+        <h:inputText value="#{pessoaBean.pessoa.login}"  pt:placeholder="Login da pessoa"/>         
         <h:outputLabel value="Senha:"/> 
-        <h:inputSecret value="#{pessoaBean.pessoa.senha}"/>        
+        <h:inputSecret value="#{pessoaBean.pessoa.senha}" pt:placeholder="Senha da pessoa"/>        
         
         <h:outputLabel value="Ativo"/>
         <h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>        

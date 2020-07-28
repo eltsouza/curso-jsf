@@ -16,12 +16,16 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.gson.Gson;
 
 import br.com.dao.DaoGeneric;
+import br.com.entidades.Cidades;
+import br.com.entidades.Estados;
 import br.com.entidades.Pessoa;
+import br.com.jpautil.JPAUtil;
 import br.com.repository.IDaoPessoa;
 import br.com.repository.IDaoPessoaImpl;
 
@@ -36,6 +40,10 @@ public class PessoaBean implements Serializable {
 	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
 	
 	private IDaoPessoa iDaoPessoa = new IDaoPessoaImpl();
+	
+	private List<SelectItem> estados;
+	
+	private List<SelectItem> cidades;
 	
 	public String salvar() {
 		pessoa = daoGeneric.merge(pessoa);
@@ -126,7 +134,6 @@ public class PessoaBean implements Serializable {
 	
 	}
 	
-	
 	public String logar() {
 		
        Pessoa pessoaUser = iDaoPessoa.consultarUsuario(pessoa.getLogin(), pessoa.getSenha());		
@@ -170,4 +177,52 @@ public class PessoaBean implements Serializable {
 		
 		return pessoaUser.getPerfilUser().equals(acesso);
 	  }
+    
+    public List<SelectItem> getEstados() {
+    	estados = iDaoPessoa.listaEstados();
+		return estados;
+	}
+    
+    //parametro obrigatorio, o JSF controla tudo
+    public void carregaCidades(AjaxBehaviorEvent event) {
+    	
+    	String codigoEstado = (String) event.getComponent().getAttributes().get("submittedValue");
+    	
+    	if(codigoEstado != null) {
+    	
+           Estados estado = JPAUtil.getEntityManager().
+        		   find(Estados.class, Long.parseLong(codigoEstado));
+           
+           if(estado != null) {
+        	   pessoa.setEstados(estado);
+        	   
+        	   List<Cidades> cidades = JPAUtil.getEntityManager().
+        			   createQuery("from Cidades where estados.id = " 
+        	          + codigoEstado).getResultList();
+        	   
+        	   List<SelectItem> selectItemsCidade = new ArrayList<SelectItem>();
+
+        	   for(Cidades cidade : cidades) {        		   
+        		   selectItemsCidade.add(new SelectItem(cidade.getId(),cidade.getNome()));
+        	   }
+        	   
+        	   setCidades(selectItemsCidade);
+           }
+    	
+    	}
+    	
+    	
     }
+     
+    public void setCidades(List<SelectItem> cidades) {
+		this.cidades = cidades;
+	}
+    
+    public List<SelectItem> getCidades() {
+		return cidades;
+	}
+     
+    
+    
+}
+
