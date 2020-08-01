@@ -14,7 +14,7 @@
     
      <ui:include src="/menu.xhtml"/>
    
-    <h:form id="formPessoa" style="margin-top:8%; margin-left:40%;">
+    <h:form id="formPessoa" enctype="multipart/form-data" style="margin-top:8%; margin-left:40%;">
  <!-- <h:graphicImage height="120px" width="120px" library="img" name="jsf_logo.png"/>
       <h1>Primeiro cadastro usando JSF/JPA e Hibernate</h1> -->
       
@@ -26,7 +26,13 @@
           <br/><br/>
         </f:facet>
         <h:outputText value="Id:"/>
-        <h:inputText value="#{pessoaBean.pessoa.id}" readonly="true"/>        
+        <h:inputText value="#{pessoaBean.pessoa.id}" readonly="true"/>  
+        
+        <h:outputLabel value="Foto:"/>
+        <h:inputFile id="foto" value="#{pessoaBean.arquivoFoto}"/>
+        
+        
+              
         <h:outputLabel value="Nome:"/>
         <h:inputText value="#{pessoaBean.pessoa.nome}" required="true" 
            requiredMessage="Informe o nome da pessoa" pt:placeholder="Nome da pessoa"
@@ -60,7 +66,7 @@
         </h:selectOneRadio>   
         <h:outputLabel value="Data Nascimento:"/>
         <h:inputText value="#{pessoaBean.pessoa.dataNascimento}" converterMessage="Data Inválida"  pt:placeholder="Data Nascimento da pessoa">
-          <f:convertDateTime pattern="dd/MM/YYYY" locale="pt_BR"  timeZone="GMT-03:00"/>
+          <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"  timeZone="GMT-03:00"/>
         </h:inputText>
         
         <h:outputLabel value="Programador:"/> 
@@ -73,15 +79,18 @@
         </h:selectOneMenu>     
 
         <h:outputLabel value="Estados:"/> 
-        <h:selectOneMenu value="#{pessoaBean.pessoa.estados}" immediate="true">
+        <h:selectOneMenu value="#{pessoaBean.pessoa.estados}" id="comboEstados" immediate="true"
+           converter="estadosConverter">
            <f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
            <f:selectItems value="#{pessoaBean.estados}"/>
-           <f:ajax event="change" execute="@this" render="comboCidade"
+           <f:ajax event="change" execute="@this" render="comboCidades"
               listener="#{pessoaBean.carregaCidades}"/>
         </h:selectOneMenu>    
+        
         <h:outputLabel value="Cidades: "/> 
-        <h:selectOneMenu value="#{pessoaBean.pessoa.cidades}" immediate="true" id="comboCidade">
-           <f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
+        <h:selectOneMenu value="#{pessoaBean.pessoa.cidades}" id="comboCidades" immediate="true" 
+          converter="cidadesConverter">
+          <f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
           <f:selectItems value="#{pessoaBean.cidades}"/>
         </h:selectOneMenu>    
         
@@ -128,7 +137,7 @@
         <h:outputLabel value="Login:"/> 
         <h:inputText value="#{pessoaBean.pessoa.login}"  pt:placeholder="Login da pessoa"/>         
         <h:outputLabel value="Senha:"/> 
-        <h:inputSecret value="#{pessoaBean.pessoa.senha}" pt:placeholder="Senha da pessoa"/>        
+        <h:inputSecret value="#{pessoaBean.pessoa.senha}" pt:placeholder="Senha da pessoa" redisplay="true"/>        
         
         <h:outputLabel value="Ativo"/>
         <h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>        
@@ -149,44 +158,65 @@
         </h:panelGroup>
       </h:panelGrid>  
     </h:form>
+    
     <h:form id="formTablePessoa" style="margin-top:2%; margin-left:40%;">
       <h:dataTable value="#{pessoaBean.pessoas}" var="pessoa" border="1" cellpadding="6" style="margin-left:-3cm;">      
+        
         <f:facet name="header">Lista de usuários cadastradas</f:facet>
+        
         <h:column>
           <f:facet name="header">ID</f:facet>
           <h:outputText value="#{pessoa.id}"/>
         </h:column>
+        
         <h:column>
           <f:facet name="header">Nome</f:facet>
           <h:outputText value="#{pessoa.nome}"/>
         </h:column>
+        
         <h:column>
           <f:facet name="header">Sobrenome</f:facet>
           <h:outputText value="#{pessoa.sobrenome}"/>
         </h:column>
+        
+        <h:column>
+          <f:facet name="header">Foto</f:facet>
+          <h:commandLink actionListener="#{pessoaBean.download}">
+             <h:graphicImage width="60" height="60" value="#{pessoa.fotoIconBase64}"/>
+             <f:param name="fileDownloadId" value="#{pessoa.id}"/>
+          </h:commandLink>
+        </h:column>
+                
         <h:column>
           <f:facet name="header">Idade</f:facet>
           <h:outputText value="#{pessoa.idade}"/>
         </h:column>
+        
         <h:column>
           <f:facet name="header">Login</f:facet>
           <h:outputText value="#{pessoa.login}"/>
-        </h:column>           
+        </h:column>
+                
         <h:column>
           <f:facet name="header">Perfil</f:facet>
           <h:outputText value="#{pessoa.perfilUser}"/>
-        </h:column>           
+        </h:column>
+                   
         <h:column rendered="#{pessoaBean.permiteAcesso('Administrador')}">
           <f:facet name="header">Ação</f:facet>
-          <h:commandLink>
+          
+          <h:commandLink title="Editar registro" immediate="true" action="#{pessoaBean.editar}" >
             <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
             <h:graphicImage value="/resources/img/editar.png" title="Editar registro"/>
           </h:commandLink>          
+          
           <h:outputLabel style="width:200px;" value="     "/>
+          
           <h:commandLink action="#{pessoaBean.remove}">
             <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
             <h:graphicImage value="/resources/img/remover.png" title="Excluir registro"/>
-          </h:commandLink>           
+          </h:commandLink>   
+                  
         </h:column>
       </h:dataTable>
     </h:form>

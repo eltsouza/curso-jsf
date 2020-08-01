@@ -13,8 +13,10 @@ public class DaoGeneric<E> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+    EntityManager entityManager = JPAUtil.getEntityManager();
+   	
 	public void salva(E entidade) {
-   		EntityManager entityManager = JPAUtil.getEntityManager();
+        EntityManager entityManager = JPAUtil.getEntityManager();
    	    EntityTransaction entityTransaction = entityManager.getTransaction();
    		entityTransaction.begin();
    		entityManager.persist(entidade); //salva os dados da entidade no banco
@@ -50,15 +52,22 @@ public class DaoGeneric<E> implements Serializable{
 	}
 	public List<E> getListEntity(Class<E> entidade){
    		EntityManager entityManager = JPAUtil.getEntityManager();
-   	    EntityTransaction entityTransaction = entityManager.getTransaction();
-   		entityTransaction.begin();
-        
+        EntityTransaction entityTransaction = entityManager.getTransaction();
+   		entityTransaction.begin();        
    		List<E> retorno = entityManager.createQuery("from " + entidade.getName()).getResultList();
-   		
    		entityTransaction.commit();
    		entityManager.close();
    		
    		return retorno;
 	}
+	public E consultar(Class<E> entidade, String codigo){
+	 	EntityTransaction entityTransaction = entityManager.getTransaction();
+		entityTransaction.begin();
+		
+		E objeto = (E) entityManager.find(entidade, Long.parseLong(codigo));
+		entityTransaction.commit();
+		return objeto;
+		
+	}	
 	
 }
