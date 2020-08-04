@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import br.com.entidades.Estados;
 import br.com.entidades.Pessoa;
@@ -21,12 +22,12 @@ public class IDaoPessoaImpl implements IDaoPessoa, Serializable {
 		
 		Pessoa pessoa = null;
 		
-   	   // EntityTransaction entityTransaction = entityManager.getTransaction();
-   		//entityTransaction.begin();
+   	    EntityTransaction entityTransaction = entityManager.getTransaction();
+   		entityTransaction.begin();
    		
 		pessoa = (Pessoa) entityManager.createQuery("select p from Pessoa p where p.login = '" + login + "' and p.senha = '" + senha + "'").getSingleResult();
 
-		//entityTransaction.commit();
+		entityTransaction.commit();
    		entityManager.close();
 		
 		return pessoa;

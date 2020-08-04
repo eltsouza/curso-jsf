@@ -21,20 +21,20 @@
 			
 			<!-- Configuraçoes do Pool de conexão com C3P0 -->
             
-            <!-- Minimo de conexões ou portas abertas -->
-			<property name="hibernate.c3p0.min_size" value="5"/>    
+            <!-- Minimo de conexões ou portas abertas 
+			<property name="hibernate.c3p0.min_size" value="5"/>    -->
 
-            <!-- Maximo de conexões ou portas abertas -->
-			<property name="hibernate.c3p0.max_size" value="100"/>    
+            <!-- Maximo de conexões ou portas abertas 
+			<property name="hibernate.c3p0.max_size" value="100"/>  -->  
 
-            <!-- Tempo em segundos que uma conexão iniativa é mantida no pool -->
-			<property name="hibernate.c3p0.timeout" value="300"/>    
+            <!-- Tempo em segundos que uma conexão iniativa é mantida no pool 
+			<property name="hibernate.c3p0.timeout" value="300"/>    -->
                   
-            <!-- Número total de instruções, transações , operações realizadas no banco de dados mantida em cache -->
-			<property name="hibernate.c3p0.max_statements" value="50"/>    
+            <!-- Número total de instruções, transações , operações realizadas no banco de dados mantida em cache
+			<property name="hibernate.c3p0.max_statements" value="50"/>     -->
 
-            <!-- Tempo ociso em segundos antes de uma conexão ser validada automaticamente -->
-			<property name="hibernate.c3p0.idle_test_period" value="120"/>    
+            <!-- Tempo ociso em segundos antes de uma conexão ser validada automaticamente 
+			<property name="hibernate.c3p0.idle_test_period" value="120"/>    -->
 			
 	   </properties>
 	</persistence-unit>
