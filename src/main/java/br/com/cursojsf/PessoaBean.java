@@ -62,7 +62,38 @@ public class PessoaBean implements Serializable {
 		
         /*Processar imagem*/
 		
-	
+		if (arquivoFoto.getSize() != 0) {
+			
+			byte[] imagemByte = getByte(arquivoFoto.getInputStream());
+			pessoa.setFotoIconBase64Original(imagemByte); // salva imagem original
+
+			/*Transformando em bufferimage - tipo manipulavel*/
+			BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imagemByte));
+			
+			/* Pega o tipo da imagem */
+			int type = bufferedImage.getType() ==0? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
+			
+			/* Transformando a imagem original em miniatura */
+			int largura = 200;
+			int altura = 200;
+			BufferedImage resizedImage = new BufferedImage(largura, altura, type);
+			Graphics2D g = resizedImage.createGraphics();
+			g.drawImage(bufferedImage, 0, 0, largura, altura, null);
+			g.dispose();
+			
+			/* Escrever novamente a imagem em tamanho menor*/
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			String extensao = arquivoFoto.getContentType().split("\\/")[1]; //retorna image/png
+            ImageIO.write(resizedImage, extensao, baos);
+            
+            String miniImagem = "data:" + arquivoFoto.getContentType() + ";base64," +
+                                DatatypeConverter.printBase64Binary(baos.toByteArray());
+            
+            /*Setar a imagem para os atributos*/
+            pessoa.setFotoIconBase64(miniImagem);
+            pessoa.setExtensao(extensao);
+            
+		}
 		
 		pessoa = daoGeneric.merge(pessoa);
 		carregarPessoas();
