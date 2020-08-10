@@ -17,14 +17,15 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -38,67 +39,86 @@ import br.com.entidades.Estados;
 import br.com.entidades.Pessoa;
 import br.com.jpautil.JPAUtil;
 import br.com.repository.IDaoPessoa;
-import br.com.repository.IDaoPessoaImpl;
 
-@ViewScoped
-@ManagedBean(name ="pessoaBean")
+@javax.faces.view.ViewScoped
+@Named(value="pessoaBean")
 public class PessoaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Pessoa pessoa = new Pessoa();
-	private DaoGeneric<Pessoa> daoGeneric = new DaoGeneric<Pessoa>();
-	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
+
+	@Inject
+	private JPAUtil jpaUtil;
 	
-	private IDaoPessoa iDaoPessoa = new IDaoPessoaImpl();
+	@Inject
+	private DaoGeneric<Pessoa> daoGeneric;
+	
+	@Inject
+	private IDaoPessoa iDaoPessoa;
+
+	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
 	
 	private List<SelectItem> estados;
 	
 	private List<SelectItem> cidades;
-	
+
 	private Part arquivoFoto;
 	
 	public String salvar() throws IOException{
 		
-        /*Processar imagem*/
-		
-		if (arquivoFoto.getSize() != 0) {
+	    byte[] imagemByte = null;
+	    if (arquivoFoto != null) {
+	        imagemByte = getByte(arquivoFoto.getInputStream());				
+	    }
 			
-			byte[] imagemByte = getByte(arquivoFoto.getInputStream());
-			pessoa.setFotoIconBase64Original(imagemByte); // salva imagem original
-
-			/*Transformando em bufferimage - tipo manipulavel*/
-			BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imagemByte));
+	    if (imagemByte != null && imagemByte.length > 0) {
+	        /* Processar imagem */		
+		pessoa.setFotoIconBase64Original(imagemByte); //salva imagem original
+				
+		/* Transformar em um buffer imagem */
+		BufferedImage  bufferedImage = ImageIO.read(new ByteArrayInputStream(imagemByte));
+				
+		// Pega o tipo da imagem
+		int type = bufferedImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
+				
+		int largura = 200;
+		int altura = 200;
+				
+		//Criar a miniatura
+		BufferedImage resizedImage = new BufferedImage(largura, altura, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(bufferedImage, 0, 0, largura, altura, null);
+		g.dispose();
+				
+		//Escrever novamente a imagem em tamanho menor
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		String extensao = arquivoFoto.getContentType().split("\\/")[1];
+		ImageIO.write(resizedImage, extensao, baos);
+				
+		String miniImagem = "data:" + arquivoFoto.getContentType() + ";base64, " + 
+						DatatypeConverter.printBase64Binary(baos.toByteArray());
+				
+		/* Processar imagem */
+		pessoa.setFotoIconBase64(miniImagem);
+		pessoa.setExtensao(extensao);
+	    }
 			
-			/* Pega o tipo da imagem */
-			int type = bufferedImage.getType() ==0? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
-			
-			/* Transformando a imagem original em miniatura */
-			int largura = 200;
-			int altura = 200;
-			BufferedImage resizedImage = new BufferedImage(largura, altura, type);
-			Graphics2D g = resizedImage.createGraphics();
-			g.drawImage(bufferedImage, 0, 0, largura, altura, null);
-			g.dispose();
-			
-			/* Escrever novamente a imagem em tamanho menor*/
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			String extensao = arquivoFoto.getContentType().split("\\/")[1]; //retorna image/png
-            ImageIO.write(resizedImage, extensao, baos);
-            
-            String miniImagem = "data:" + arquivoFoto.getContentType() + ";base64," +
-                                DatatypeConverter.printBase64Binary(baos.toByteArray());
-            
-            /*Setar a imagem para os atributos*/
-            pessoa.setFotoIconBase64(miniImagem);
-            pessoa.setExtensao(extensao);
-            
-		}
-		
 		pessoa = daoGeneric.merge(pessoa);
-		carregarPessoas();
+	    pessoa = new Pessoa();
+	    carregarPessoas();
 		mostrarMsg("Registro cadastrado com sucesso.");
-		return "";
+	    return "";
+	}
+	
+	public void registraLog(){
+		System.out.println("Registra Log");
+	}
+	
+	public void mudancaDeValor(ValueChangeEvent valueChangeEvent) {
+		System.out.println("Valor antigo.:" + valueChangeEvent.getOldValue());
+		System.out.println("Valor novo.:" + valueChangeEvent.getNewValue());
+
 	}
 	
 	private void mostrarMsg(String msg) {
@@ -198,6 +218,7 @@ public class PessoaBean implements Serializable {
        }		
 	}
 	
+	@SuppressWarnings("static-access")
 	public String deslogar() {
  	   FacesContext context = FacesContext.getCurrentInstance();
  	   ExternalContext externalContext = context.getExternalContext();
@@ -248,9 +269,10 @@ public class PessoaBean implements Serializable {
            }
     }
     
-    public void mostrarCidades(Estados estado) {
+    @SuppressWarnings("unchecked")
+	public void mostrarCidades(Estados estado) {
     	
-  	   List<Cidades> cidades = JPAUtil.getEntityManager().
+  	   List<Cidades> cidades = jpaUtil.getEntityManager().
 			   createQuery("from Cidades where estados.id = " 
 	          + estado.getId()).getResultList();
 	   
@@ -263,7 +285,7 @@ public class PessoaBean implements Serializable {
 	   setCidades(selectItemsCidade);
     }
     
-    public void editar() {
+    public String editar() {
     
     	if (pessoa.getCidades() != null) {
     		Estados estado = pessoa.getCidades().getEstados();
@@ -272,6 +294,7 @@ public class PessoaBean implements Serializable {
     		mostrarCidades(estado);
     	}
     
+    	return "";
     }
      
     public void setCidades(List<SelectItem> cidades) {

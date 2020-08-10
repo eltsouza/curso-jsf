@@ -15,6 +15,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.constraints.br.TituloEleitoral;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -25,10 +33,16 @@ public class Pessoa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotEmpty
+	@Size(min=10,max=50,message="Nome deve ter entre 10 e 50 caracteres")
 	private String nome;
 
+	@NotEmpty(message="Sobrenome deve ser informado")
+	@NotNull(message="Sobrenome deve ser informado")
 	private String sobrenome;
 
+	@DecimalMin(value="10",message="Idade deve ser maior que 10")
+	@DecimalMax(value="50",message="Idade deve ser menor que 50")
 	private Integer idade;
 
 	@Temporal(TemporalType.DATE)
@@ -41,6 +55,13 @@ public class Pessoa implements Serializable {
 	private String perfilUser;
     private String nivelProgramador;
     private Integer[] linguagens;
+    
+    @CPF(message="CPF Inválido")
+    private String cpf;
+    
+    @TituloEleitoral(message="Titulo eleitoral inválido")
+    private String titEleitoral;
+    
     private String cep;
     private String logradouro;
     private String complemento;
@@ -284,6 +305,22 @@ public class Pessoa implements Serializable {
 
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getTitEleitoral() {
+		return titEleitoral;
+	}
+
+	public void setTitEleitoral(String titEleitoral) {
+		this.titEleitoral = titEleitoral;
 	}
 
 	@Override
