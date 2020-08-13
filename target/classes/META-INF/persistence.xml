@@ -12,7 +12,7 @@
 
 		<properties>
 			<!-- Dados de conexão com o banco -->
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/cursojsf" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/meuprimeiroprojetojsf" />
 			<property name="javax.persistence.jdbc.user" value="postgres" />
 			<property name="javax.persistence.jdbc.password" value="admin" />
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
