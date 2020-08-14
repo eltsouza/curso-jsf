@@ -32,10 +32,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsf-api-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsf-impl-2.2.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/gson-2.8.5.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre-9.0.4">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/weld-servlet-2.2.9.Final.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
