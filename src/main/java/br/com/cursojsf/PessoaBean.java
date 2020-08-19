@@ -354,6 +354,18 @@ public class PessoaBean implements Serializable {
 		response.getOutputStream().flush();
 		FacesContext.getCurrentInstance().responseComplete();
     }
+
+	public IDaoPessoa getiDaoPessoa() {
+		return iDaoPessoa;
+	}
+
+	public void setiDaoPessoa(IDaoPessoa iDaoPessoa) {
+		this.iDaoPessoa = iDaoPessoa;
+	}
+    
+    
+    
+    
     
     
 }
